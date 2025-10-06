@@ -9,7 +9,9 @@
     --cor-secundaria: #254FA9;
     --padding-padrao: 20px;
 }
-
+body{
+    background-color: var(--cor-principal);
+}
 header{
     background-color: var(--cor-secundaria);
     color: var(--cor-principal);
@@ -19,9 +21,13 @@ header{
     justify-content: center;
     padding: var(--padding-padrao);
 }
-main{
-    /*height: 85vh;*/
+header input{
+    border-radius: 20px;
+    border: none;
+    padding: 8px;
     background-color: var(--cor-principal);
+}
+main{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,13 +46,6 @@ main{
 
 }
 
-.container button{
-    border-radius: 20px;
-    padding: 10px;
-    background-color: var(--cor-secundaria);
-    color: var(--cor-principal);
-    border: none;
-}
 footer{
     background-color: var(--cor-secundaria);
     color: var(--cor-principal);
