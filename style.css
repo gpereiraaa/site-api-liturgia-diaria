@@ -13,6 +13,7 @@ body{
     background-color: var(--cor-principal);
 }
 header{
+    gap: 50px;
     background-color: var(--cor-secundaria);
     color: var(--cor-principal);
     display: flex;
@@ -22,9 +23,20 @@ header{
     padding: var(--padding-padrao);
 }
 header input{
-    border-radius: 20px;
+    /* border-radius: 20px; */
     border: none;
-    padding: 8px;
+    /* padding: 8px; */
+    background-color: var(--cor-principal);
+}
+header button{
+    border: none;
+}
+.caixa-de-selecao{
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+    color: var(--cor-secundaria);
+    border-radius: 20px;
     background-color: var(--cor-principal);
 }
 main{
