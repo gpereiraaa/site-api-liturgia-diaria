@@ -13,7 +13,7 @@ async function criarLiturgiaDiaDesejado() {
     const url = `https://liturgia.up.railway.app/v2/?dia=${dia}&mes=${mes}&ano=${ano}`
     const response = await fetch(url)
     const dados = await response.json()
-    
+
     criarTextos(dados)
 
 }
@@ -21,7 +21,6 @@ async function criarLiturgiaDiaDesejado() {
 
 
 async function buscarLiturgiaAtual() {
-    //const url = `https://liturgia.up.railway.app/v2/?dia=19&mes=04&ano=2025`
     const url = `https://liturgia.up.railway.app/v2/`
     const response = await fetch(url)
     const dados = await response.json()
@@ -36,6 +35,7 @@ async function criarTextos(informacoes) {
         const data = document.createElement('h2')
         data.textContent = dados.data
         container.appendChild(data)
+
 
         const semana = document.createElement('h2')
         semana.textContent = dados.liturgia
