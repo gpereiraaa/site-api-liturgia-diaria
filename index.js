@@ -1,20 +1,30 @@
 'use strict'
 
 const container = document.getElementById('container')
+const button = document.getElementById('button')
 
 
 async function criarLiturgiaDiaDesejado() {
     const inputData = document.getElementById('inputData').value
-    const partesDaData = inputData.split('-')
+    if (inputData != undefined && inputData != '' && inputData != null) {
 
-    const ano = partesDaData[0]
-    const mes = partesDaData[1]
-    const dia = partesDaData[2]
-    const url = `https://liturgia.up.railway.app/v2/?dia=${dia}&mes=${mes}&ano=${ano}`
-    const response = await fetch(url)
-    const dados = await response.json()
+        const partesDaData = inputData.split('-')
 
-    criarTextos(dados)
+        const ano = partesDaData[0]
+        const mes = partesDaData[1]
+        const dia = partesDaData[2]
+        const url = `https://liturgia.up.railway.app/v2/?dia=${dia}&mes=${mes}&ano=${ano}`
+        const response = await fetch(url)
+        const dados = await response.json()
+
+        criarTextos(dados)
+
+    } else {
+        container.textContent = ''
+        const erro = document.createElement('h3')
+        erro.textContent = 'Liturgia não encontrada'
+        container.appendChild(erro)
+    }
 
 }
 
@@ -32,39 +42,50 @@ async function criarTextos(informacoes) {
     try {
         const dados = await informacoes
 
-        const data = document.createElement('h2')
-        data.textContent = dados.data
-        container.appendChild(data)
+        if (dados.data) {
+            const data = document.createElement('h2')
+            data.textContent = dados.data
+            container.appendChild(data)
+        }
 
+        if (dados.liturgia) {
+            const semana = document.createElement('h2')
+            semana.textContent = dados.liturgia
+            container.appendChild(semana)
+        }
 
-        const semana = document.createElement('h2')
-        semana.textContent = dados.liturgia
-        container.appendChild(semana)
+        if (dados.cor) {
+            const corLiturgica = document.createElement('h2')
+            corLiturgica.textContent = `Cor litúrgica: ${dados.cor}`
+            container.appendChild(corLiturgica)
+        }
 
-        const corLiturgica = document.createElement('h2')
-        corLiturgica.textContent = `Cor litúrgica: ${dados.cor}`
-        container.appendChild(corLiturgica)
+        if (dados.oracoes.coleta) {
+            const coleta = document.createElement('p')
+            coleta.textContent = dados.oracoes.coleta
+            const tituloColeta = document.createElement('h3')
+            tituloColeta.textContent = 'Oração coleta:'
+            container.appendChild(tituloColeta)
+            container.appendChild(coleta)
+        }
 
-        const coleta = document.createElement('p')
-        coleta.textContent = dados.oracoes.coleta
-        const tituloColeta = document.createElement('h3')
-        tituloColeta.textContent = 'Oração coleta:'
-        container.appendChild(tituloColeta)
-        container.appendChild(coleta)
+        if (dados.oracoes.oferendas) {
+            const oferendas = document.createElement('p')
+            oferendas.textContent = dados.oracoes.oferendas
+            const tituloOferendas = document.createElement('h3')
+            tituloOferendas.textContent = 'Sobre as oferendas:'
+            container.appendChild(tituloOferendas)
+            container.appendChild(oferendas)
+        }
 
-        const oferendas = document.createElement('p')
-        oferendas.textContent = dados.oracoes.oferendas
-        const tituloOferendas = document.createElement('h3')
-        tituloOferendas.textContent = 'Sobre as oferendas:'
-        container.appendChild(tituloOferendas)
-        container.appendChild(oferendas)
-
-        const posComunhao = document.createElement('p')
-        posComunhao.textContent = dados.oracoes.comunhao
-        const tituloPosComunhao = document.createElement('h3')
-        tituloPosComunhao.textContent = 'Oração pós comunhão:'
-        container.appendChild(tituloPosComunhao)
-        container.appendChild(posComunhao)
+        if (dados.oracoes.comunhao) {
+            const posComunhao = document.createElement('p')
+            posComunhao.textContent = dados.oracoes.comunhao
+            const tituloPosComunhao = document.createElement('h3')
+            tituloPosComunhao.textContent = 'Oração pós comunhão:'
+            container.appendChild(tituloPosComunhao)
+            container.appendChild(posComunhao)
+        }
 
         if (dados.oracoes.extras.length > 0) {
             dados.oracoes.extras.forEach(oracoesExtras => {
@@ -151,20 +172,22 @@ async function criarTextos(informacoes) {
 
         }
 
-        dados.leituras.evangelho.forEach(dadosEvangelho => {
-            const tituloEvangelho = document.createElement('h3')
-            tituloEvangelho.textContent = dadosEvangelho.titulo
+        if (dados.leituras.evangelho) {
+            dados.leituras.evangelho.forEach(dadosEvangelho => {
+                const tituloEvangelho = document.createElement('h3')
+                tituloEvangelho.textContent = dadosEvangelho.titulo
 
-            const referenciaEvangelho = document.createElement('h3')
-            referenciaEvangelho.textContent = `Evangelho (${dadosEvangelho.referencia})`
+                const referenciaEvangelho = document.createElement('h3')
+                referenciaEvangelho.textContent = `Evangelho (${dadosEvangelho.referencia})`
 
-            const textoEvangelho = document.createElement('p')
-            textoEvangelho.textContent = dadosEvangelho.texto
+                const textoEvangelho = document.createElement('p')
+                textoEvangelho.textContent = dadosEvangelho.texto
 
-            container.appendChild(referenciaEvangelho)
-            container.appendChild(tituloEvangelho)
-            container.appendChild(textoEvangelho)
-        })
+                container.appendChild(referenciaEvangelho)
+                container.appendChild(tituloEvangelho)
+                container.appendChild(textoEvangelho)
+            })
+        }
 
         if (dados.antifonas) {
 
@@ -190,5 +213,7 @@ async function criarTextos(informacoes) {
         container.appendChild(erro)
     }
 }
+
+button.addEventListener('click', function () { criarLiturgiaDiaDesejado() })
 
 criarTextos(buscarLiturgiaAtual())
